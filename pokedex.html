@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pokédex | PokéTeam Builder</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            PokéTeam Builder
+        </a>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="pokedex.html" class="active">Pokédex</a>
+            <a href="favoritos.html">Favoritos ⭐</a>
+            <a href="equipos.html">Mis equipos</a>
+        </nav>
+    </header>
+
+    <main class="page-container">
+
+        <section class="page-header">
+            <span class="page-label">Pokédex</span>
+
+            <h1>Encuentra tu próximo Pokémon</h1>
+
+            <p>
+                Escribe su nombre o número para consultar
+                información directamente desde PokéAPI.
+            </p>
+        </section>
+
+        <section class="search-panel">
+
+            <form id="searchForm" class="search-form">
+
+                <input
+                    type="text"
+                    id="pokemonInput"
+                    placeholder="Ejemplo: pikachu o 25"
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </form>
+
+            <p id="searchMessage" class="message"></p>
+
+        </section>
+
+        <section id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Consultando PokéAPI...</p>
+        </section>
+
+        <section id="pokemonResult" class="pokemon-result"></section>
+
+    </main>
+
+    <script src="js/pokedex.js"></script>
+
+</body>
+</html>
