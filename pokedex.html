@@ -1,74 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
 
-    <title>Pokédex | PokéTeam Builder</title>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
 
-    <link rel="stylesheet" href="css/styles.css">
-</head>
+        <title>Pokédex | PokéTeam Builder</title>
 
-<body>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/pokedex.css">
+    </head>
 
-    <header class="navbar">
-        <a href="index.html" class="logo">
-            PokéTeam Builder
-        </a>
+    <body>
 
-        <nav>
-            <a href="index.html">Inicio</a>
-            <a href="pokedex.html" class="active">Pokédex</a>
-            <a href="favoritos.html">Favoritos ⭐</a>
-            <a href="equipos.html">Mis equipos</a>
-        </nav>
-    </header>
+        <header class="navbar">
+            <a href="index.html" class="logo">
+                PokéTeam Builder
+            </a>
 
-    <main class="page-container">
+            <nav>
+                <a href="index.html">Inicio</a>
+                <a href="pokedex.html" class="active">Pokédex</a>
+                <a href="favoritos.html">Favoritos ⭐</a>
+                <a href="equipos.html">Mis equipos</a>
+            </nav>
+        </header>
 
-        <section class="page-header">
-            <span class="page-label">Pokédex</span>
+        <main class="pokedex-main">
 
-            <h1>Encuentra tu próximo Pokémon</h1>
+            <section class="pokedex-header">
+                <span class="pokedex-label">
+                    Explora el mundo Pokémon
+                </span>
 
-            <p>
-                Escribe su nombre o número para consultar
-                información directamente desde PokéAPI.
-            </p>
-        </section>
+                <h1>
+                    Encuentra tu próximo
+                    <span>compañero Pokémon</span>
+                </h1>
 
-        <section class="search-panel">
+                <p>
+                    Busca Pokémon por nombre o número, filtra por tipo
+                    y consulta su información directamente desde PokéAPI.
+                </p>
+            </section>
 
-            <form id="searchForm" class="search-form">
+            <section
+                class="pokedex-controls"
+                aria-label="Controles de búsqueda"
+            >
+                <form id="searchForm" class="search-container">
+                    <input
+                        type="search"
+                        id="pokemonSearch"
+                        placeholder="Buscar: pikachu, charizard o 25..."
+                        autocomplete="off"
+                        aria-label="Buscar Pokémon"
+                    >
 
-                <input
-                    type="text"
-                    id="pokemonInput"
-                    placeholder="Ejemplo: pikachu o 25"
-                    autocomplete="off"
-                    required
+                    <button
+                        type="submit"
+                        class="search-button"
+                        aria-label="Realizar búsqueda"
+                        title="Buscar"
+                    >
+                        🔍
+                    </button>
+                </form>
+
+                <select
+                    id="typeFilter"
+                    class="type-filter"
+                    aria-label="Filtrar por tipo"
                 >
+                    <option value="">Todos los tipos</option>
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fuego</option>
+                    <option value="water">Agua</option>
+                    <option value="electric">Eléctrico</option>
+                    <option value="grass">Planta</option>
+                    <option value="ice">Hielo</option>
+                    <option value="fighting">Lucha</option>
+                    <option value="poison">Veneno</option>
+                    <option value="ground">Tierra</option>
+                    <option value="flying">Volador</option>
+                    <option value="psychic">Psíquico</option>
+                    <option value="bug">Bicho</option>
+                    <option value="rock">Roca</option>
+                    <option value="ghost">Fantasma</option>
+                    <option value="dragon">Dragón</option>
+                    <option value="dark">Siniestro</option>
+                    <option value="steel">Acero</option>
+                    <option value="fairy">Hada</option>
+                </select>
+            </section>
 
-                <button type="submit" class="btn btn-primary">
-                    Buscar
+            <p
+                id="pokedexFeedback"
+                class="pokedex-feedback"
+                aria-live="polite"
+            ></p>
+
+            <section
+                id="pokedexLoading"
+                class="pokedex-loading"
+            >
+                <div class="pokedex-spinner"></div>
+                <p>Cargando Pokémon...</p>
+            </section>
+
+            <section
+                id="pokemonGrid"
+                class="pokemon-grid"
+                aria-label="Lista de Pokémon"
+            ></section>
+
+            <section
+                id="noResults"
+                class="no-results hidden"
+            >
+                <h2>No encontramos resultados</h2>
+                <p>
+                    Prueba con otro nombre, número o tipo de Pokémon.
+                </p>
+            </section>
+
+            <div
+                id="loadMoreContainer"
+                class="load-more-container hidden"
+            >
+                <button
+                    type="button"
+                    id="loadMoreButton"
+                    class="load-more-button"
+                >
+                    Cargar más Pokémon
                 </button>
+            </div>
 
-            </form>
+        </main>
 
-            <p id="searchMessage" class="message"></p>
+        <footer>
+            <p>
+                PokéTeam Builder — Proyecto universitario
+            </p>
+        </footer>
 
-        </section>
-
-        <section id="loading" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Consultando PokéAPI...</p>
-        </section>
-
-        <section id="pokemonResult" class="pokemon-result"></section>
-
-    </main>
-
-    <script src="js/pokedex.js"></script>
-
-</body>
+        <script src="js/pokedex.js"></script>
+    </body>
 </html>
