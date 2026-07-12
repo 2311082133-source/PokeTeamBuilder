@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Equipos | PokéTeam Builder</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/firebase-pages.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            PokéTeam Builder
+        </a>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="pokedex.html">Pokédex</a>
+            <a href="favoritos.html">Favoritos ⭐</a>
+            <a href="equipos.html" class="active">
+                Mis equipos
+            </a>
+        </nav>
+    </header>
+
+    <main class="database-main">
+        <section class="database-header">
+            <span class="database-label">
+                Constructor de equipos
+            </span>
+
+            <h1>Mis equipos Pokémon</h1>
+
+            <p>
+                Crea equipos y adminístralos mediante
+                Firebase Realtime Database.
+            </p>
+        </section>
+
+        <section class="team-form-panel">
+            <form id="teamForm" class="team-form">
+                <input
+                    type="text"
+                    id="teamName"
+                    placeholder="Nombre del equipo"
+                    maxlength="40"
+                    required
+                >
+
+                <button type="submit">
+                    Crear equipo
+                </button>
+            </form>
+        </section>
+
+        <p
+            id="teamsMessage"
+            class="database-message"
+            aria-live="polite"
+        ></p>
+
+        <section
+            id="teamsLoading"
+            class="database-loading"
+        >
+            Cargando equipos...
+        </section>
+
+        <section
+            id="teamsEmpty"
+            class="empty-state hidden"
+        >
+            <h2>No existen equipos todavía</h2>
+            <p>
+                Escribe un nombre para crear el primero.
+            </p>
+        </section>
+
+        <section
+            id="teamsList"
+            class="teams-list"
+        ></section>
+    </main>
+
+    <script
+        type="module"
+        src="js/equipos.js"
+    ></script>
+</body>
+</html>

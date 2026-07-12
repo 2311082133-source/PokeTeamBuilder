@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Favoritos | PokéTeam Builder</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/firebase-pages.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            PokéTeam Builder
+        </a>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="pokedex.html">Pokédex</a>
+            <a href="favoritos.html" class="active">
+                Favoritos ⭐
+            </a>
+            <a href="equipos.html">Mis equipos</a>
+        </nav>
+    </header>
+
+    <main class="database-main">
+        <section class="database-header">
+            <span class="database-label">
+                Firebase Realtime Database
+            </span>
+
+            <h1>Mis Pokémon favoritos</h1>
+
+            <p>
+                Los cambios realizados en esta sección se
+                actualizan automáticamente desde Firebase.
+            </p>
+        </section>
+
+        <p
+            id="favoritesMessage"
+            class="database-message"
+            aria-live="polite"
+        ></p>
+
+        <section
+            id="favoritesLoading"
+            class="database-loading"
+        >
+            Cargando favoritos...
+        </section>
+
+        <section
+            id="favoritesEmpty"
+            class="empty-state hidden"
+        >
+            <h2>Todavía no tienes favoritos</h2>
+            <p>
+                Agrega Pokémon desde la Pokédex para verlos aquí.
+            </p>
+        </section>
+
+        <section
+            id="favoritesGrid"
+            class="favorites-grid"
+        ></section>
+    </main>
+
+    <script
+        type="module"
+        src="js/favoritos.js"
+    ></script>
+</body>
+</html>
