@@ -1,0 +1,250 @@
+.database-main {
+    width: min(1150px, 92%);
+    margin: auto;
+    padding: 65px 0 90px;
+}
+
+.database-header {
+    max-width: 720px;
+    margin-bottom: 35px;
+}
+
+.database-label {
+    color: #2a75bb;
+    font-size: 0.83rem;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.database-header h1 {
+    margin: 10px 0 14px;
+    color: #172033;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: -3px;
+}
+
+.database-header p {
+    color: #677489;
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.database-message {
+    min-height: 26px;
+    margin-bottom: 18px;
+    font-weight: 800;
+}
+
+.database-message.success {
+    color: #168c4c;
+}
+
+.database-message.error {
+    color: #c93434;
+}
+
+.database-message.info {
+    color: #2a75bb;
+}
+
+.database-loading {
+    padding: 55px;
+    text-align: center;
+    color: #677489;
+}
+
+.empty-state {
+    padding: 55px 25px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 23px;
+    text-align: center;
+    color: #677489;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.empty-state h2 {
+    margin-bottom: 9px;
+    color: #172033;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.favorite-item {
+    overflow: hidden;
+    border: 1px solid #dce3ed;
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 14px 35px rgba(28, 43, 64, 0.08);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.favorite-item:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 22px 45px rgba(28, 43, 64, 0.14);
+}
+
+.favorite-image-box {
+    min-height: 210px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #e8f4fd, #badcf6);
+}
+
+.favorite-image-box img {
+    width: 175px;
+    max-width: 90%;
+    filter: drop-shadow(0 17px 12px rgba(0, 0, 0, 0.18));
+}
+
+.favorite-content {
+    padding: 21px;
+}
+
+.favorite-content h2 {
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.favorite-type {
+    color: #677489;
+    text-transform: capitalize;
+}
+
+.favorite-actions {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+}
+
+.favorite-details,
+.favorite-delete {
+    min-height: 43px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.favorite-details {
+    color: white;
+    background: #2a75bb;
+}
+
+.favorite-delete {
+    width: 45px;
+    color: white;
+    background: #e24e4e;
+}
+
+.team-form-panel {
+    padding: 25px;
+    border: 1px solid #dce3ed;
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 14px 35px rgba(28, 43, 64, 0.08);
+}
+
+.team-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 13px;
+}
+
+.team-form input {
+    min-height: 52px;
+    padding: 0 17px;
+    border: 2px solid #dce3ed;
+    border-radius: 13px;
+    font: inherit;
+    outline: none;
+}
+
+.team-form input:focus {
+    border-color: #2a75bb;
+}
+
+.team-form button {
+    min-height: 52px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 13px;
+    color: white;
+    background: #2a75bb;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.teams-list {
+    margin-top: 28px;
+    display: grid;
+    gap: 18px;
+}
+
+.team-item {
+    padding: 24px;
+    border: 1px solid #dce3ed;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 12px 30px rgba(28, 43, 64, 0.07);
+}
+
+.team-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.team-item-header h2 {
+    color: #172033;
+}
+
+.team-item-header button {
+    min-height: 40px;
+    padding: 0 15px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background: #e24e4e;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 1000px) {
+    .favorites-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 730px) {
+    .favorites-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .team-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .favorites-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-item-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
