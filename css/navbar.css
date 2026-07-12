@@ -1,0 +1,136 @@
+.navbar {
+    width: 100%;
+    min-height: 78px;
+    padding: 14px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid rgba(205, 216, 230, 0.85);
+    backdrop-filter: blur(14px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #2372b9;
+    font-size: 1.35rem;
+    font-weight: 900;
+}
+
+.logo-ball {
+    width: 34px;
+    height: 34px;
+    border: 4px solid #202735;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+        to bottom,
+        #ef5350 0 44%,
+        #202735 44% 56%,
+        #ffffff 56% 100%
+    );
+}
+
+.logo-ball::after {
+    width: 10px;
+    height: 10px;
+    border: 3px solid #202735;
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+}
+
+.navbar nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.navbar nav a {
+    padding: 9px 0;
+    position: relative;
+    color: #667289;
+    font-weight: 800;
+    transition: color 0.2s ease;
+}
+
+.navbar nav a::after {
+    width: 0;
+    height: 3px;
+    border-radius: 999px;
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    background: #2a75bb;
+    transition: width 0.2s ease;
+}
+
+.navbar nav a:hover,
+.navbar nav a.active {
+    color: #2a75bb;
+}
+
+.navbar nav a:hover::after,
+.navbar nav a.active::after {
+    width: 100%;
+}
+
+.menu-button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    display: none;
+    color: #ffffff;
+    background: #2a75bb;
+    cursor: pointer;
+    font-size: 1.3rem;
+}
+
+@media (max-width: 760px) {
+    .navbar {
+        padding: 14px 5%;
+        flex-wrap: wrap;
+    }
+
+    .menu-button {
+        display: block;
+    }
+
+    .navbar nav {
+        width: 100%;
+        padding: 14px;
+        border-radius: 16px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        background: white;
+        box-shadow: 0 16px 35px rgba(28, 43, 64, 0.13);
+    }
+
+    .navbar nav.open {
+        display: flex;
+    }
+
+    .navbar nav a {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .navbar nav a:hover {
+        background: #eef5fb;
+    }
+}

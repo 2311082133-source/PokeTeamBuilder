@@ -2,97 +2,152 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>PokéTeam Builder</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
 
     <header class="navbar">
         <a href="index.html" class="logo">
+            <span class="logo-ball"></span>
             PokéTeam Builder
         </a>
 
-        <nav>
-            <a href="index.html">Inicio</a>
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Abrir menú"
+        >
+            ☰
+        </button>
+
+        <nav id="mainNavigation">
+            <a href="index.html" class="active">Inicio</a>
             <a href="pokedex.html">Pokédex</a>
             <a href="favoritos.html">Favoritos ⭐</a>
             <a href="equipos.html">Mis equipos</a>
         </nav>
     </header>
 
-    <main class="hero">
+    <main class="home-main">
 
-        <div class="hero-content">
-            <span class="hero-label">Construye tu equipo ideal</span>
+        <section class="home-hero">
+            <div class="hero-content">
+                <span class="hero-label">
+                    Construye tu equipo ideal
+                </span>
 
-            <h1>
-                Descubre, guarda y crea tu propio
-                <span>equipo Pokémon</span>
-            </h1>
+                <h1>
+                    Descubre, guarda y crea tu propio
+                    <span>equipo Pokémon</span>
+                </h1>
 
-            <p>
-                Explora Pokémon, consulta sus estadísticas,
-                agrégalos a favoritos y crea equipos de hasta seis integrantes.
-            </p>
+                <p>
+                    Explora Pokémon, conoce sus estadísticas,
+                    guarda tus favoritos y forma equipos de hasta
+                    seis integrantes.
+                </p>
 
-            <div class="hero-buttons">
-                <a href="pokedex.html" class="btn btn-primary">
-                    Explorar Pokédex
-                </a>
+                <div class="hero-buttons">
+                    <a
+                        href="pokedex.html"
+                        class="hero-btn hero-btn-primary"
+                    >
+                        Explorar Pokédex
+                        <span>→</span>
+                    </a>
 
-                <a href="equipos.html" class="btn btn-secondary">
-                    Ver mis equipos
-                </a>
+                    <a
+                        href="equipos.html"
+                        class="hero-btn hero-btn-secondary"
+                    >
+                        Ver mis equipos
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <div class="pokeball-container">
-            <div class="pokeball">
-                <div class="pokeball-line"></div>
-                <div class="pokeball-button"></div>
+            <div class="hero-visual">
+                <div
+                    class="hero-pokeball"
+                    aria-label="Pokébola decorativa"
+                ></div>
             </div>
-        </div>
+        </section>
+
+        <section class="features-section">
+            <div class="section-heading">
+                <span>Funciones principales</span>
+                <h2>Todo lo necesario para formar tu equipo</h2>
+            </div>
+
+            <div class="features-grid">
+
+                <article class="home-feature-card">
+                    <div class="home-feature-icon">🔍</div>
+                    <h3>Explora Pokémon</h3>
+                    <p>
+                        Busca por nombre o número, filtra por tipo
+                        y consulta sus características.
+                    </p>
+                    <a
+                        href="pokedex.html"
+                        class="home-feature-link"
+                    >
+                        Abrir Pokédex →
+                    </a>
+                </article>
+
+                <article class="home-feature-card">
+                    <div class="home-feature-icon">⭐</div>
+                    <h3>Guarda favoritos</h3>
+                    <p>
+                        Conserva tus Pokémon favoritos y recibe
+                        actualizaciones mediante Firebase.
+                    </p>
+                    <a
+                        href="favoritos.html"
+                        class="home-feature-link"
+                    >
+                        Ver favoritos →
+                    </a>
+                </article>
+
+                <article class="home-feature-card">
+                    <div class="home-feature-icon">👥</div>
+                    <h3>Crea equipos</h3>
+                    <p>
+                        Construye equipos personalizados de hasta
+                        seis Pokémon.
+                    </p>
+                    <a
+                        href="equipos.html"
+                        class="home-feature-link"
+                    >
+                        Crear equipo →
+                    </a>
+                </article>
+
+            </div>
+        </section>
 
     </main>
 
-    <section class="features">
-
-        <article class="feature-card">
-            <div class="feature-icon">🔍</div>
-            <h2>Explora Pokémon</h2>
-            <p>
-                Busca Pokémon por nombre o número y consulta
-                sus principales características.
-            </p>
-        </article>
-
-        <article class="feature-card">
-            <div class="feature-icon">⭐</div>
-            <h2>Guarda favoritos</h2>
-            <p>
-                Marca tus Pokémon preferidos y consúltalos
-                fácilmente desde una sola sección.
-            </p>
-        </article>
-
-        <article class="feature-card">
-            <div class="feature-icon">👥</div>
-            <h2>Crea equipos</h2>
-            <p>
-                Forma equipos personalizados con un máximo
-                de seis Pokémon.
-            </p>
-        </article>
-
-    </section>
-
-    <footer>
-        <p>PokéTeam Builder — Proyecto universitario</p>
+    <footer class="main-footer">
+        <p class="footer-brand">PokéTeam Builder</p>
+        <p>Proyecto universitario · PokéAPI + Firebase</p>
     </footer>
 
+    <script src="js/app.js"></script>
 </body>
 </html>
