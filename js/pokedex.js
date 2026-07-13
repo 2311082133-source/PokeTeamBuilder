@@ -1,3 +1,11 @@
+import {
+    database,
+    ref,
+    set,
+    get,
+    remove
+} from "./firebase.js";
+
 const API_URL = "https://pokeapi.co/api/v2";
 
 const INITIAL_LIMIT = 20;
@@ -21,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadInitialPokemon();
 });
 
+/* =========================
+   BUSCADOR
+========================= */
+
 searchForm.addEventListener("submit", async event => {
     event.preventDefault();
 
@@ -38,21 +50,28 @@ searchForm.addEventListener("submit", async event => {
     await searchPokemon(value);
 });
 
-pokemonSearch.addEventListener("input", debounce(async event => {
-    const value = event.target.value
-        .trim()
-        .toLowerCase();
+pokemonSearch.addEventListener(
+    "input",
+    debounce(async event => {
+        const value = event.target.value
+            .trim()
+            .toLowerCase();
 
-    if (!value) {
-        await resetPokedex();
-        return;
-    }
+        if (!value) {
+            await resetPokedex();
+            return;
+        }
 
-    if (value.length >= 2 || /^\d+$/.test(value)) {
-        typeFilter.value = "";
-        await searchPokemon(value);
-    }
-}, 500));
+        if (value.length >= 2 || /^\d+$/.test(value)) {
+            typeFilter.value = "";
+            await searchPokemon(value);
+        }
+    }, 500)
+);
+
+/* =========================
+   FILTRO POR TIPO
+========================= */
 
 typeFilter.addEventListener("change", async event => {
     const selectedType = event.target.value;
@@ -67,6 +86,10 @@ typeFilter.addEventListener("change", async event => {
     await loadPokemonByType(selectedType);
 });
 
+/* =========================
+   CARGAR MÁS
+========================= */
+
 loadMoreButton.addEventListener("click", async () => {
     if (isLoading || currentMode !== "list") {
         return;
@@ -80,6 +103,56 @@ loadMoreButton.addEventListener("click", async () => {
         true
     );
 });
+
+/* =========================
+   EVENTOS DE LAS TARJETAS
+========================= */
+
+pokemonGrid.addEventListener("click", async event => {
+    const detailsButton = event.target.closest(
+        "[data-details-id]"
+    );
+
+    if (detailsButton) {
+        const pokemonId = detailsButton.dataset.detailsId;
+
+        window.location.href =
+            `pokemon.html?id=${encodeURIComponent(pokemonId)}`;
+
+        return;
+    }
+
+    const favoriteButton = event.target.closest(
+        "[data-favorite-id]"
+    );
+
+    if (favoriteButton) {
+        const pokemonId =
+            favoriteButton.dataset.favoriteId;
+
+        await toggleFavorite(
+            pokemonId,
+            favoriteButton
+        );
+
+        return;
+    }
+
+    const teamButton = event.target.closest(
+        "[data-team-id]"
+    );
+
+    if (teamButton) {
+        const pokemonId = teamButton.dataset.teamId;
+
+        window.location.href =
+            `equipos.html?pokemonId=${encodeURIComponent(pokemonId)}`;
+    }
+});
+
+/* =========================
+   CARGA INICIAL
+========================= */
 
 async function loadInitialPokemon() {
     currentOffset = 0;
@@ -106,7 +179,15 @@ async function resetPokedex() {
     );
 }
 
-async function loadPokemonList(limit, offset, append) {
+/* =========================
+   LISTA DE POKÉMON
+========================= */
+
+async function loadPokemonList(
+    limit,
+    offset,
+    append
+) {
     if (isLoading) {
         return;
     }
@@ -123,7 +204,9 @@ async function loadPokemonList(limit, offset, append) {
         );
 
         if (!response.ok) {
-            throw new Error("No fue posible cargar la lista.");
+            throw new Error(
+                "No fue posible cargar la lista."
+            );
         }
 
         const data = await response.json();
@@ -134,7 +217,12 @@ async function loadPokemonList(limit, offset, append) {
             )
         );
 
-        renderPokemonCards(pokemonDetails, append);
+        renderPokemonCards(
+            pokemonDetails,
+            append
+        );
+
+        await updateFavoriteButtons();
 
         showFeedback(
             `${pokemonGrid.children.length} Pokémon mostrados.`,
@@ -155,6 +243,10 @@ async function loadPokemonList(limit, offset, append) {
     }
 }
 
+/* =========================
+   BÚSQUEDA POR NOMBRE O ID
+========================= */
+
 async function searchPokemon(value) {
     if (isLoading) {
         return;
@@ -166,6 +258,7 @@ async function searchPokemon(value) {
     pokemonGrid.innerHTML = "";
     loadMoreContainer.classList.add("hidden");
     noResults.classList.add("hidden");
+
     clearFeedback();
 
     try {
@@ -174,12 +267,19 @@ async function searchPokemon(value) {
         );
 
         if (!response.ok) {
-            throw new Error("Pokémon no encontrado.");
+            throw new Error(
+                "Pokémon no encontrado."
+            );
         }
 
         const pokemon = await response.json();
 
-        renderPokemonCards([pokemon], false);
+        renderPokemonCards(
+            [pokemon],
+            false
+        );
+
+        await updateFavoriteButtons();
 
         showFeedback(
             `Encontramos a ${capitalize(pokemon.name)}.`,
@@ -200,6 +300,10 @@ async function searchPokemon(value) {
     }
 }
 
+/* =========================
+   POKÉMON POR TIPO
+========================= */
+
 async function loadPokemonByType(type) {
     if (isLoading) {
         return;
@@ -211,6 +315,7 @@ async function loadPokemonByType(type) {
     pokemonGrid.innerHTML = "";
     loadMoreContainer.classList.add("hidden");
     noResults.classList.add("hidden");
+
     clearFeedback();
 
     try {
@@ -219,7 +324,9 @@ async function loadPokemonByType(type) {
         );
 
         if (!response.ok) {
-            throw new Error("No fue posible consultar el tipo.");
+            throw new Error(
+                "No fue posible consultar el tipo."
+            );
         }
 
         const data = await response.json();
@@ -227,7 +334,9 @@ async function loadPokemonByType(type) {
         const pokemonList = data.pokemon
             .map(item => item.pokemon)
             .filter(item => {
-                const id = getPokemonIdFromUrl(item.url);
+                const id =
+                    getPokemonIdFromUrl(item.url);
+
                 return id <= 1025;
             })
             .slice(0, 40);
@@ -238,7 +347,12 @@ async function loadPokemonByType(type) {
             )
         );
 
-        renderPokemonCards(pokemonDetails, false);
+        renderPokemonCards(
+            pokemonDetails,
+            false
+        );
+
+        await updateFavoriteButtons();
 
         showFeedback(
             `${pokemonDetails.length} Pokémon de tipo ${translateType(type)}.`,
@@ -262,36 +376,71 @@ async function loadPokemonByType(type) {
     }
 }
 
+/* =========================
+   CONSULTAS A POKÉAPI
+========================= */
+
 async function fetchPokemonDetails(url) {
     const response = await fetch(url);
 
     if (!response.ok) {
-        throw new Error("Error al obtener detalles.");
+        throw new Error(
+            "Error al obtener detalles."
+        );
     }
 
     return response.json();
 }
 
-function renderPokemonCards(pokemonList, append) {
+async function getPokemonById(pokemonId) {
+    const response = await fetch(
+        `${API_URL}/pokemon/${encodeURIComponent(pokemonId)}`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "No se pudo consultar el Pokémon."
+        );
+    }
+
+    return response.json();
+}
+
+/* =========================
+   RENDERIZADO DE TARJETAS
+========================= */
+
+function renderPokemonCards(
+    pokemonList,
+    append
+) {
     const cards = pokemonList
         .filter(Boolean)
         .map((pokemon, index) =>
-            createPokemonCard(pokemon, index)
+            createPokemonCard(
+                pokemon,
+                index
+            )
         )
         .join("");
 
     if (append) {
-        pokemonGrid.insertAdjacentHTML("beforeend", cards);
+        pokemonGrid.insertAdjacentHTML(
+            "beforeend",
+            cards
+        );
     } else {
         pokemonGrid.innerHTML = cards;
     }
-
-    addCardEvents();
 }
 
-function createPokemonCard(pokemon, index) {
+function createPokemonCard(
+    pokemon,
+    index
+) {
     const image =
-        pokemon.sprites.other?.["official-artwork"]?.front_default ||
+        pokemon.sprites.other?.["official-artwork"]
+            ?.front_default ||
         pokemon.sprites.other?.home?.front_default ||
         pokemon.sprites.front_default ||
         "";
@@ -300,15 +449,21 @@ function createPokemonCard(pokemon, index) {
         item => item.type.name
     );
 
-    const mainType = types[0] || "normal";
+    const mainType =
+        types[0] || "normal";
 
     return `
         <article
             class="pokemon-card"
-            style="animation-delay: ${Math.min(index * 35, 350)}ms"
+            style="animation-delay: ${Math.min(
+                index * 35,
+                350
+            )}ms"
             data-pokemon-id="${pokemon.id}"
         >
-            <div class="pokemon-card-top background-${mainType}">
+            <div
+                class="pokemon-card-top background-${mainType}"
+            >
                 <span class="pokemon-number">
                     #${String(pokemon.id).padStart(3, "0")}
                 </span>
@@ -332,17 +487,25 @@ function createPokemonCard(pokemon, index) {
             </div>
 
             <div class="pokemon-card-body">
-                <h2>${capitalize(pokemon.name)}</h2>
+
+                <h2>
+                    ${capitalize(pokemon.name)}
+                </h2>
 
                 <div class="pokemon-types">
-                    ${types.map(type => `
-                        <span class="type-chip chip-${type}">
-                            ${translateType(type)}
-                        </span>
-                    `).join("")}
+                    ${types
+                        .map(type => `
+                            <span
+                                class="type-chip chip-${type}"
+                            >
+                                ${translateType(type)}
+                            </span>
+                        `)
+                        .join("")}
                 </div>
 
                 <div class="pokemon-card-actions">
+
                     <button
                         type="button"
                         class="details-button"
@@ -360,62 +523,152 @@ function createPokemonCard(pokemon, index) {
                     >
                         ＋
                     </button>
+
                 </div>
             </div>
         </article>
     `;
 }
 
-function addCardEvents() {
-    document
-        .querySelectorAll("[data-details-id]")
-        .forEach(button => {
-            button.addEventListener("click", () => {
-                const pokemonId = button.dataset.detailsId;
+/* =========================
+   FAVORITOS CON FIREBASE
+========================= */
 
-                window.location.href =
-                    `pokemon.html?id=${encodeURIComponent(pokemonId)}`;
-            });
+async function toggleFavorite(
+    pokemonId,
+    button
+) {
+    const favoriteReference = ref(
+        database,
+        `favoritos/${pokemonId}`
+    );
+
+    try {
+        button.disabled = true;
+
+        const snapshot = await get(
+            favoriteReference
+        );
+
+        if (snapshot.exists()) {
+            await remove(favoriteReference);
+
+            button.textContent = "☆";
+            button.title =
+                "Agregar a favoritos";
+
+            showFeedback(
+                "Pokémon eliminado de favoritos.",
+                "success"
+            );
+
+            return;
+        }
+
+        const pokemon =
+            await getPokemonById(pokemonId);
+
+        const image =
+            pokemon.sprites.other?.["official-artwork"]
+                ?.front_default ||
+            pokemon.sprites.other?.home?.front_default ||
+            pokemon.sprites.front_default ||
+            "";
+
+        const mainType =
+            pokemon.types[0]?.type?.name ||
+            "normal";
+
+        await set(favoriteReference, {
+            pokemonId: pokemon.id,
+            nombre: pokemon.name,
+            imagen: image,
+            tipo: translateType(mainType),
+            tipoOriginal: mainType,
+            fechaAgregado:
+                new Date().toISOString()
         });
 
-    document
-        .querySelectorAll("[data-favorite-id]")
-        .forEach(button => {
-            button.addEventListener("click", () => {
-                button.textContent =
-                    button.textContent === "☆" ? "★" : "☆";
+        button.textContent = "★";
+        button.title =
+            "Eliminar de favoritos";
 
-                showFeedback(
-                    "La conexión con Firebase se agregará en la siguiente etapa.",
-                    "info"
-                );
-            });
-        });
+        showFeedback(
+            `${capitalize(pokemon.name)} fue agregado a favoritos.`,
+            "success"
+        );
+    } catch (error) {
+        console.error(
+            "Error al actualizar favorito:",
+            error
+        );
 
-    document
-        .querySelectorAll("[data-team-id]")
-        .forEach(button => {
-            button.addEventListener("click", () => {
-                showFeedback(
-                    "El constructor de equipos se conectará próximamente.",
-                    "info"
-                );
-            });
-        });
+        showFeedback(
+            "No fue posible actualizar favoritos.",
+            "error"
+        );
+    } finally {
+        button.disabled = false;
+    }
 }
+
+async function updateFavoriteButtons() {
+    try {
+        const favoritesSnapshot = await get(
+            ref(database, "favoritos")
+        );
+
+        const favorites =
+            favoritesSnapshot.val() || {};
+
+        document
+            .querySelectorAll(
+                "[data-favorite-id]"
+            )
+            .forEach(button => {
+                const pokemonId =
+                    button.dataset.favoriteId;
+
+                const isFavorite =
+                    Boolean(favorites[pokemonId]);
+
+                button.textContent =
+                    isFavorite ? "★" : "☆";
+
+                button.title = isFavorite
+                    ? "Eliminar de favoritos"
+                    : "Agregar a favoritos";
+            });
+    } catch (error) {
+        console.error(
+            "No fue posible comprobar los favoritos:",
+            error
+        );
+    }
+}
+
+/* =========================
+   FUNCIONES AUXILIARES
+========================= */
 
 function getPokemonIdFromUrl(url) {
     const parts = url
         .split("/")
         .filter(Boolean);
 
-    return Number(parts[parts.length - 1]);
+    return Number(
+        parts[parts.length - 1]
+    );
 }
 
 function setLoading(show) {
     isLoading = show;
 
-    pokedexLoading.classList.toggle("hidden", !show);
+    pokedexLoading.classList.toggle(
+        "hidden",
+        !show
+    );
+
     loadMoreButton.disabled = show;
 
     if (show) {
@@ -423,15 +676,21 @@ function setLoading(show) {
     }
 }
 
-function showFeedback(message, type = "info") {
+function showFeedback(
+    message,
+    type = "info"
+) {
     pokedexFeedback.textContent = message;
+
     pokedexFeedback.className =
         `pokedex-feedback ${type}`;
 }
 
 function clearFeedback() {
     pokedexFeedback.textContent = "";
-    pokedexFeedback.className = "pokedex-feedback";
+
+    pokedexFeedback.className =
+        "pokedex-feedback";
 }
 
 function capitalize(text) {
@@ -439,7 +698,10 @@ function capitalize(text) {
         return "";
     }
 
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    return (
+        text.charAt(0).toUpperCase() +
+        text.slice(1)
+    );
 }
 
 function translateType(type) {
@@ -464,10 +726,16 @@ function translateType(type) {
         fairy: "Hada"
     };
 
-    return translations[type] || capitalize(type);
+    return (
+        translations[type] ||
+        capitalize(type)
+    );
 }
 
-function debounce(callback, delay) {
+function debounce(
+    callback,
+    delay
+) {
     let timeoutId;
 
     return (...args) => {

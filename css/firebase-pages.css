@@ -248,3 +248,289 @@
         flex-direction: column;
     }
 }
+/* Pokémon pendiente para agregar */
+
+.pending-pokemon-panel {
+    margin-bottom: 28px;
+    padding: 25px;
+    border: 1px solid #dce3ed;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgba(28, 43, 64, 0.1);
+}
+
+.pending-pokemon-header {
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    align-items: center;
+    gap: 22px;
+}
+
+.pending-pokemon-header img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    border-radius: 20px;
+    background: #eef6fd;
+}
+
+.pending-pokemon-header h2 {
+    margin: 5px 0;
+    text-transform: capitalize;
+}
+
+.pending-pokemon-header p {
+    color: #677489;
+}
+
+.pending-cancel-link {
+    padding: 11px 16px;
+    border-radius: 12px;
+    color: #677489;
+    background: #f0f3f7;
+    font-weight: 800;
+}
+
+.pending-team-list {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 13px;
+}
+
+.pending-team-option {
+    min-height: 110px;
+    padding: 17px;
+    border: 2px solid #dce3ed;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    color: #172033;
+    background: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+.pending-team-option:hover:not(:disabled) {
+    border-color: #2a75bb;
+    transform: translateY(-3px);
+}
+
+.pending-team-option small {
+    color: #677489;
+}
+
+.pending-team-option strong {
+    margin-top: auto;
+    color: #2a75bb;
+}
+
+.pending-team-option:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.pending-no-teams {
+    padding: 25px;
+    border-radius: 14px;
+    color: #677489;
+    background: #f3f6fa;
+}
+
+/* Pokémon dentro de equipos */
+
+.team-pokemon-grid {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 13px;
+}
+
+.team-pokemon-card {
+    padding: 13px;
+    border: 1px solid #dce3ed;
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+}
+
+.team-pokemon-card img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+.team-pokemon-card strong,
+.team-pokemon-card span {
+    display: block;
+    text-transform: capitalize;
+}
+
+.team-pokemon-card span {
+    margin-top: 4px;
+    color: #677489;
+    font-size: 0.85rem;
+}
+
+.team-pokemon-card button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #e24e4e;
+    cursor: pointer;
+}
+
+.team-empty-pokemon {
+    grid-column: 1 / -1;
+    padding: 22px;
+    border-radius: 14px;
+    color: #677489;
+    background: #f3f6fa;
+}
+
+.delete-team-button {
+    min-height: 42px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 11px;
+    color: #ffffff;
+    background: #e24e4e;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+/* Modal personalizado */
+
+.modal-open {
+    overflow: hidden;
+}
+
+.custom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.custom-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.62);
+    backdrop-filter: blur(5px);
+}
+
+.custom-modal-content {
+    width: min(430px, 100%);
+    padding: 32px;
+    border-radius: 24px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    background: #ffffff;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.22s ease;
+}
+
+.custom-modal-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff1d6;
+    font-size: 2rem;
+}
+
+.custom-modal-content h2 {
+    margin-bottom: 10px;
+    color: #172033;
+}
+
+.custom-modal-content p {
+    color: #677489;
+    line-height: 1.6;
+}
+
+.custom-modal-actions {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal-button {
+    min-height: 48px;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.modal-cancel {
+    color: #465166;
+    background: #edf1f5;
+}
+
+.modal-confirm {
+    color: #ffffff;
+    background: #e24e4e;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 850px) {
+    .pending-team-list,
+    .team-pokemon-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .pending-pokemon-header {
+        grid-template-columns: 85px 1fr;
+    }
+
+    .pending-pokemon-header img {
+        width: 85px;
+        height: 85px;
+    }
+
+    .pending-cancel-link {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+
+    .pending-team-list,
+    .team-pokemon-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-modal-actions {
+        grid-template-columns: 1fr;
+    }
+}

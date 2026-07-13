@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Detalle del Pokémon | PokéTeam Builder
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/navbar.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/pokedex.css"
+    >
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a
+            href="index.html"
+            class="logo"
+        >
+            <span class="logo-ball"></span>
+            PokéTeam Builder
+        </a>
+
+        <nav>
+            <a href="index.html">
+                Inicio
+            </a>
+
+            <a href="pokedex.html">
+                Pokédex
+            </a>
+
+            <a href="favoritos.html">
+                Favoritos ⭐
+            </a>
+
+            <a href="equipos.html">
+                Mis equipos
+            </a>
+        </nav>
+    </header>
+
+    <main class="page-container">
+
+        <section
+            id="pokemonLoading"
+            class="loading"
+        >
+            <div class="spinner"></div>
+
+            <p>
+                Cargando información del Pokémon...
+            </p>
+        </section>
+
+        <p
+            id="pokemonMessage"
+            class="message"
+            aria-live="polite"
+        ></p>
+
+        <section
+            id="pokemonDetail"
+        ></section>
+
+    </main>
+
+    <script
+        type="module"
+        src="js/pokemon.js"
+    ></script>
+
+</body>
+</html>
