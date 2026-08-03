@@ -709,3 +709,43 @@
         grid-template-columns: 1fr;
     }
 }
+.pokebolas-section {
+    margin-top: 30px;
+}
+
+.pokebolas-section h2 {
+    margin-bottom: 16px;
+}
+
+.pokebolas-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(210px, 1fr)
+    );
+    gap: 16px;
+}
+
+.pokebola-card {
+    padding: 18px;
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px
+        rgba(0, 0, 0, 0.08);
+}
+
+.pokebola-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+}
+
+.pokebola-card p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.pokebola-card strong {
+    display: inline-block;
+    margin-top: 5px;
+}
