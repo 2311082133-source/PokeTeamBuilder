@@ -1,694 +1,738 @@
-import { database, ref, set, get, remove } from "./firebase.js";
+import {
+    database,
+    ref,
+    set,
+    get,
+    remove
+} from "./firebase.js";
 
-const API_URL = "https://pokeapi.co/api/v2";
 
-const POKEBOLAS_API_URL = "http://localhost:5198/api/Pokebolas";
+const API_URL =
+    "https://pokeapi.co/api/v2";
 
-const pokemonLoading = document.getElementById("pokemonLoading");
 
-const pokemonMessage = document.getElementById("pokemonMessage");
+/*
+ * Si la página se abre mediante Live Server,
+ * utiliza la API local.
+ *
+ * Si la página se abre desde GitHub Pages,
+ * utiliza la API publicada en Render.
+ */
+const IS_LOCAL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
 
-const pokemonDetail = document.getElementById("pokemonDetail");
 
-document.addEventListener("DOMContentLoaded", loadPokemonDetail);
+const POKEBOLAS_API_URL = IS_LOCAL
+    ? "http://localhost:5198/api/Pokebolas"
+    : "https://poketeambuilder-1.onrender.com/api/Pokebolas";
+
+
+const pokemonLoading =
+    document.getElementById("pokemonLoading");
+
+const pokemonMessage =
+    document.getElementById("pokemonMessage");
+
+const pokemonDetail =
+    document.getElementById("pokemonDetail");
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadPokemonDetail
+);
+
 
 async function loadPokemonDetail() {
-  const params = new URLSearchParams(window.location.search);
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-  const pokemonId = params.get("id");
+    const pokemonId =
+        params.get("id");
 
-  if (!pokemonId) {
-    showMessage("No se recibió el identificador del Pokémon.", "error");
+    if (!pokemonId) {
+        showMessage(
+            "No se recibió el identificador del Pokémon.",
+            "error"
+        );
 
-    hideLoading();
-
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `${API_URL}/pokemon/${encodeURIComponent(pokemonId)}`,
-    );
-
-    if (!response.ok) {
-      throw new Error("Pokémon no encontrado.");
+        hideLoading();
+        return;
     }
 
-    const pokemon = await response.json();
+    try {
+        const response = await fetch(
+            `${API_URL}/pokemon/${encodeURIComponent(pokemonId)}`
+        );
 
-    renderPokemonDetail(pokemon);
+        if (!response.ok) {
+            throw new Error(
+                `Pokémon no encontrado. Código: ${response.status}`
+            );
+        }
 
-    loadPokebolas();
-  } catch (error) {
-    console.error(error);
+        const pokemon =
+            await response.json();
 
-    showMessage("No fue posible cargar la información del Pokémon.", "error");
-  } finally {
-    hideLoading();
-  }
+        renderPokemonDetail(pokemon);
+
+        /*
+         * No utilizamos await aquí para que la información
+         * principal del Pokémon aparezca inmediatamente.
+         */
+        loadPokebolas();
+
+    } catch (error) {
+        console.error(
+            "Error al cargar el Pokémon:",
+            error
+        );
+
+        showMessage(
+            "No fue posible cargar la información del Pokémon.",
+            "error"
+        );
+
+    } finally {
+        hideLoading();
+    }
 }
 
+
 function renderPokemonDetail(pokemon) {
-  const image =
-    pokemon.sprites.other?.["official-artwork"]?.front_default ||
-    pokemon.sprites.other?.home?.front_default ||
-    pokemon.sprites.front_default ||
-    "";
+    const image =
+        pokemon.sprites.other?.["official-artwork"]
+            ?.front_default ||
+        pokemon.sprites.other?.home
+            ?.front_default ||
+        pokemon.sprites.front_default ||
+        "";
 
-  const types = pokemon.types.map((item) => item.type.name);
+    const types =
+        pokemon.types.map(
+            item => item.type.name
+        );
 
-  const mainType = types[0] || "normal";
+    const mainType =
+        types[0] || "normal";
 
-  const abilities = pokemon.abilities
-    .map((item) => formatText(item.ability.name))
-    .join(", ");
+    const abilities =
+        pokemon.abilities
+            .map(item =>
+                formatText(
+                    item.ability.name
+                )
+            )
+            .join(", ");
 
-  const stats = pokemon.stats.reduce((result, item) => {
-    result[item.stat.name] = item.base_stat;
+    const stats =
+        pokemon.stats.reduce(
+            (result, item) => {
+                result[item.stat.name] =
+                    item.base_stat;
 
-    return result;
-  }, {});
+                return result;
+            },
+            {}
+        );
 
-  pokemonDetail.innerHTML = `
-
-
+    pokemonDetail.innerHTML = `
         <article class="pokemon-detail-card">
-
 
             <div
                 class="pokemon-image-section background-${mainType}"
             >
-
-
                 <span class="pokemon-number">
-
                     #${String(pokemon.id).padStart(3, "0")}
-
                 </span>
 
-
-
                 <img
-
                     src="${image}"
-
-                    alt="Imagen de ${pokemon.name}"
-
+                    alt="Imagen de ${escapeHtml(pokemon.name)}"
                     class="pokemon-image"
-
                 >
-
-
             </div>
-
-
-
 
             <div class="pokemon-information">
 
-
                 <div class="pokemon-title">
 
-
                     <div>
-
                         <span class="pokemon-small-label">
-
                             Información del Pokémon
-
                         </span>
 
-
-
                         <h1>
-
                             ${capitalize(pokemon.name)}
-
                         </h1>
-
-
                     </div>
 
-
-
-
                     <button
-
                         type="button"
-
                         id="favoriteButton"
-
                         class="favorite-button"
-
                         title="Agregar a favoritos"
-
                         aria-label="Agregar a favoritos"
-
                     >
-
                         ☆
-
                     </button>
 
-
-
                 </div>
-
-
-
-
 
                 <div class="pokemon-types">
-
-
                     ${types
-                      .map(
-                        (type) => `
-
+                        .map(type => `
                             <span
-
                                 class="type-chip chip-${type}"
-
                             >
-
                                 ${translateType(type)}
-
                             </span>
-
-                            `,
-                      )
-                      .join("")}
-
-
+                        `)
+                        .join("")}
                 </div>
-
-
-
-
 
                 <div class="pokemon-data-grid">
 
-
                     <div class="data-box">
-
-                        <span>
-
-                            Altura
-
-                        </span>
-
+                        <span>Altura</span>
 
                         <strong>
-
                             ${pokemon.height / 10} m
-
                         </strong>
-
-
                     </div>
 
-
-
-
                     <div class="data-box">
-
-                        <span>
-
-                            Peso
-
-                        </span>
-
+                        <span>Peso</span>
 
                         <strong>
-
                             ${pokemon.weight / 10} kg
-
                         </strong>
-
-
                     </div>
-
-
-
 
                     <div class="data-box">
-
                         <span>
-
                             Experiencia base
-
                         </span>
 
-
                         <strong>
-
                             ${pokemon.base_experience ?? "N/D"}
-
                         </strong>
-
-
                     </div>
-
 
                 </div>
 
-
-
-
-
                 <section class="abilities">
-
-
-                    <h2>
-
-                        Habilidades
-
-                    </h2>
-
-
+                    <h2>Habilidades</h2>
 
                     <p>
-
                         ${abilities || "No disponible"}
-
                     </p>
-
-
-
                 </section>
-
-
-
-
 
                 <section class="stats">
+                    <h2>Estadísticas</h2>
 
+                    ${createStat(
+                        "Vida",
+                        stats.hp
+                    )}
 
-                    <h2>
+                    ${createStat(
+                        "Ataque",
+                        stats.attack
+                    )}
 
-                        Estadísticas
+                    ${createStat(
+                        "Defensa",
+                        stats.defense
+                    )}
 
-                    </h2>
+                    ${createStat(
+                        "Ataque especial",
+                        stats["special-attack"]
+                    )}
 
+                    ${createStat(
+                        "Defensa especial",
+                        stats["special-defense"]
+                    )}
 
-
-
-                    ${createStat("Vida", stats.hp)}
-
-
-
-                    ${createStat("Ataque", stats.attack)}
-
-
-
-                    ${createStat("Defensa", stats.defense)}
-
-
-
-                    ${createStat("Ataque especial", stats["special-attack"])}
-
-
-
-                    ${createStat("Defensa especial", stats["special-defense"])}
-
-
-
-                    ${createStat("Velocidad", stats.speed)}
-
-
-
+                    ${createStat(
+                        "Velocidad",
+                        stats.speed
+                    )}
                 </section>
-
-
-
-
 
                 <section
-
                     id="pokebolasContainer"
-
                     class="pokebolas-section"
-
+                    aria-live="polite"
                 >
-
                     <h2>
-
                         Poké Balls recomendadas
-
                     </h2>
 
-
                     <p>
-
                         Cargando Poké Balls...
-
                     </p>
-
-
                 </section>
 
-
-
-
-
                 <button
-
                     type="button"
-
                     id="addToTeamButton"
-
                     class="btn btn-primary team-button"
-
                 >
-
                     Agregar a mi equipo
-
                 </button>
 
-
-
-
             </div>
-
-
 
         </article>
-
-
     `;
 
-  addDetailEvents(pokemon, image, types);
+    addDetailEvents(
+        pokemon,
+        image,
+        types
+    );
 }
+
+
 async function loadPokebolas() {
-  try {
-    const response = await fetch(POKEBOLAS_API_URL);
-
-    if (!response.ok) {
-      throw new Error("No se pudieron cargar las Poké Balls.");
-    }
-
-    const pokebolas = await response.json();
-
-    renderPokebolas(pokebolas);
-  } catch (error) {
-    console.error("Error cargando Poké Balls:", error);
-
-    const container = document.getElementById("pokebolasContainer");
-
-    if (container) {
-      container.innerHTML = `
-
-                <h2>
-                    Poké Balls recomendadas
-                </h2>
-
-                <p>
-                    No fue posible cargar las Poké Balls.
-                </p>
-
-            `;
-    }
-  }
-}
-
-function renderPokebolas(pokebolas) {
-  const container = document.getElementById("pokebolasContainer");
-
-  if (!container) {
-    return;
-  }
-
-  container.innerHTML = `
-
-
-        <h2>
-
-            Poké Balls recomendadas
-
-        </h2>
-
-
-
-        <div class="pokebolas-grid">
-
-
-            ${pokebolas
-              .map(
-                (ball) => `
-
-
-                    <article class="pokebola-card">
-
-
-                        <h3>
-
-                            ${ball.nombre}
-
-                        </h3>
-
-
-
-                        <p>
-
-                            ${ball.descripcion ?? "Sin descripción"}
-
-                        </p>
-
-
-
-                        <strong>
-                            Efectividad:
-                            ${ball.efectividad ?? "No especificada"}
-                        </strong>
-
-
-
-                    </article>
-
-
-                    `,
-              )
-              .join("")}
-
-
-        </div>
-
-
-    `;
-}
-
-function addDetailEvents(pokemon, image, types) {
-  const favoriteButton = document.getElementById("favoriteButton");
-
-  const addToTeamButton = document.getElementById("addToTeamButton");
-
-  const favoriteReference = ref(database, `favoritos/${pokemon.id}`);
-
-  checkFavoriteStatus(favoriteReference, favoriteButton);
-
-  favoriteButton.addEventListener("click", async () => {
-    try {
-      favoriteButton.disabled = true;
-
-      const snapshot = await get(favoriteReference);
-
-      if (snapshot.exists()) {
-        await remove(favoriteReference);
-
-        favoriteButton.textContent = "☆";
-
-        favoriteButton.title = "Agregar a favoritos";
-
-        favoriteButton.setAttribute("aria-label", "Agregar a favoritos");
-
-        showMessage(
-          `${capitalize(pokemon.name)} fue eliminado de favoritos.`,
-          "success",
+    const container =
+        document.getElementById(
+            "pokebolasContainer"
         );
 
+    if (!container) {
         return;
-      }
-
-      const mainType = types[0] || "normal";
-
-      await set(favoriteReference, {
-        pokemonId: pokemon.id,
-
-        nombre: pokemon.name,
-
-        imagen: image,
-
-        tipo: translateType(mainType),
-
-        tipoOriginal: mainType,
-
-        fechaAgregado: new Date().toISOString(),
-      });
-
-      favoriteButton.textContent = "★";
-
-      favoriteButton.title = "Eliminar de favoritos";
-
-      favoriteButton.setAttribute("aria-label", "Eliminar de favoritos");
-
-      showMessage(
-        `${capitalize(pokemon.name)} fue agregado a favoritos.`,
-        "success",
-      );
-    } catch (error) {
-      console.error("Error al actualizar favorito:", error);
-
-      showMessage("No fue posible actualizar favoritos.", "error");
-    } finally {
-      favoriteButton.disabled = false;
     }
-  });
 
-  addToTeamButton.addEventListener("click", () => {
-    window.location.href = `equipos.html?pokemonId=${encodeURIComponent(pokemon.id)}`;
-  });
+    try {
+        console.log(
+            "Consultando API de Poké Balls:",
+            POKEBOLAS_API_URL
+        );
+
+        const response = await fetch(
+            POKEBOLAS_API_URL,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `La API respondió con el código ${response.status}.`
+            );
+        }
+
+        const pokebolas =
+            await response.json();
+
+        if (!Array.isArray(pokebolas)) {
+            throw new Error(
+                "La respuesta de la API no contiene una lista."
+            );
+        }
+
+        renderPokebolas(pokebolas);
+
+    } catch (error) {
+        console.error(
+            "Error cargando Poké Balls:",
+            error
+        );
+
+        container.innerHTML = `
+            <h2>
+                Poké Balls recomendadas
+            </h2>
+
+            <p class="pokebolas-error">
+                No fue posible cargar las Poké Balls.
+                Intenta nuevamente en unos segundos.
+            </p>
+        `;
+    }
 }
 
-async function checkFavoriteStatus(favoriteReference, favoriteButton) {
-  try {
-    const snapshot = await get(favoriteReference);
 
-    const isFavorite = snapshot.exists();
+function renderPokebolas(pokebolas) {
+    const container =
+        document.getElementById(
+            "pokebolasContainer"
+        );
 
-    favoriteButton.textContent = isFavorite ? "★" : "☆";
+    if (!container) {
+        return;
+    }
 
-    favoriteButton.title = isFavorite
-      ? "Eliminar de favoritos"
-      : "Agregar a favoritos";
+    if (pokebolas.length === 0) {
+        container.innerHTML = `
+            <h2>
+                Poké Balls recomendadas
+            </h2>
 
-    favoriteButton.setAttribute(
-      "aria-label",
-      isFavorite ? "Eliminar de favoritos" : "Agregar a favoritos",
-    );
-  } catch (error) {
-    console.error("No fue posible comprobar el favorito:", error);
-  }
-}
+            <p>
+                La API no tiene Poké Balls registradas.
+            </p>
+        `;
 
-function createStat(name, value = 0) {
-  const percentage = Math.min((Number(value) / 180) * 100, 100);
+        return;
+    }
 
-  return `
+    container.innerHTML = `
+        <h2>
+            Poké Balls recomendadas
+        </h2>
 
+        <div class="pokebolas-grid">
+            ${pokebolas
+                .map(ball => `
+                    <article class="pokebola-card">
 
-        <div class="stat-row">
+                        <h3>
+                            ${escapeHtml(
+                                ball.nombre ??
+                                "Poké Ball sin nombre"
+                            )}
+                        </h3>
 
+                        <p>
+                            ${escapeHtml(
+                                ball.descripcion ??
+                                "Sin descripción"
+                            )}
+                        </p>
 
-            <div class="stat-header">
+                        <p class="pokebola-effectiveness">
+                            <strong>
+                                Efectividad:
+                            </strong>
 
+                            ${escapeHtml(
+                                ball.efectividad ??
+                                "No especificada"
+                            )}
+                        </p>
 
-                <span>
-
-                    ${name}
-
-                </span>
-
-
-                <strong>
-
-                    ${value}
-
-                </strong>
-
-
-            </div>
-
-
-
-
-            <div class="stat-bar">
-
-
-                <div
-
-                    class="stat-progress"
-
-                    style="width:${percentage}%"
-
-                ></div>
-
-
-            </div>
-
-
-
+                    </article>
+                `)
+                .join("")}
         </div>
-
-
     `;
 }
 
+
+function addDetailEvents(
+    pokemon,
+    image,
+    types
+) {
+    const favoriteButton =
+        document.getElementById(
+            "favoriteButton"
+        );
+
+    const addToTeamButton =
+        document.getElementById(
+            "addToTeamButton"
+        );
+
+    if (
+        !favoriteButton ||
+        !addToTeamButton
+    ) {
+        return;
+    }
+
+    const favoriteReference =
+        ref(
+            database,
+            `favoritos/${pokemon.id}`
+        );
+
+    checkFavoriteStatus(
+        favoriteReference,
+        favoriteButton
+    );
+
+    favoriteButton.addEventListener(
+        "click",
+        async () => {
+            try {
+                favoriteButton.disabled =
+                    true;
+
+                const snapshot =
+                    await get(
+                        favoriteReference
+                    );
+
+                if (snapshot.exists()) {
+                    await remove(
+                        favoriteReference
+                    );
+
+                    favoriteButton.textContent =
+                        "☆";
+
+                    favoriteButton.title =
+                        "Agregar a favoritos";
+
+                    favoriteButton.setAttribute(
+                        "aria-label",
+                        "Agregar a favoritos"
+                    );
+
+                    showMessage(
+                        `${capitalize(pokemon.name)} fue eliminado de favoritos.`,
+                        "success"
+                    );
+
+                    return;
+                }
+
+                const mainType =
+                    types[0] || "normal";
+
+                await set(
+                    favoriteReference,
+                    {
+                        pokemonId:
+                            pokemon.id,
+
+                        nombre:
+                            pokemon.name,
+
+                        imagen:
+                            image,
+
+                        tipo:
+                            translateType(
+                                mainType
+                            ),
+
+                        tipoOriginal:
+                            mainType,
+
+                        fechaAgregado:
+                            new Date()
+                                .toISOString()
+                    }
+                );
+
+                favoriteButton.textContent =
+                    "★";
+
+                favoriteButton.title =
+                    "Eliminar de favoritos";
+
+                favoriteButton.setAttribute(
+                    "aria-label",
+                    "Eliminar de favoritos"
+                );
+
+                showMessage(
+                    `${capitalize(pokemon.name)} fue agregado a favoritos.`,
+                    "success"
+                );
+
+            } catch (error) {
+                console.error(
+                    "Error al actualizar favorito:",
+                    error
+                );
+
+                showMessage(
+                    "No fue posible actualizar favoritos.",
+                    "error"
+                );
+
+            } finally {
+                favoriteButton.disabled =
+                    false;
+            }
+        }
+    );
+
+    addToTeamButton.addEventListener(
+        "click",
+        () => {
+            window.location.href =
+                `equipos.html?pokemonId=${encodeURIComponent(pokemon.id)}`;
+        }
+    );
+}
+
+
+async function checkFavoriteStatus(
+    favoriteReference,
+    favoriteButton
+) {
+    try {
+        const snapshot =
+            await get(
+                favoriteReference
+            );
+
+        const isFavorite =
+            snapshot.exists();
+
+        favoriteButton.textContent =
+            isFavorite
+                ? "★"
+                : "☆";
+
+        favoriteButton.title =
+            isFavorite
+                ? "Eliminar de favoritos"
+                : "Agregar a favoritos";
+
+        favoriteButton.setAttribute(
+            "aria-label",
+            isFavorite
+                ? "Eliminar de favoritos"
+                : "Agregar a favoritos"
+        );
+
+    } catch (error) {
+        console.error(
+            "No fue posible comprobar el favorito:",
+            error
+        );
+    }
+}
+
+
+function createStat(
+    name,
+    value = 0
+) {
+    const numericValue =
+        Number(value) || 0;
+
+    const percentage =
+        Math.min(
+            (numericValue / 180) * 100,
+            100
+        );
+
+    return `
+        <div class="stat-row">
+
+            <div class="stat-header">
+                <span>
+                    ${name}
+                </span>
+
+                <strong>
+                    ${numericValue}
+                </strong>
+            </div>
+
+            <div class="stat-bar">
+                <div
+                    class="stat-progress"
+                    style="width: ${percentage}%"
+                ></div>
+            </div>
+
+        </div>
+    `;
+}
+
+
 function hideLoading() {
-  pokemonLoading.classList.add("hidden");
+    if (pokemonLoading) {
+        pokemonLoading.classList.add(
+            "hidden"
+        );
+    }
 }
 
-function showMessage(message, type = "info") {
-  pokemonMessage.textContent = message;
 
-  pokemonMessage.className = `message ${type}`;
+function showMessage(
+    message,
+    type = "info"
+) {
+    if (!pokemonMessage) {
+        return;
+    }
+
+    pokemonMessage.textContent =
+        message;
+
+    pokemonMessage.className =
+        `message ${type}`;
 }
+
 
 function capitalize(text) {
-  if (!text) {
-    return "";
-  }
+    if (!text) {
+        return "";
+    }
 
-  return text.charAt(0).toUpperCase() + text.slice(1);
+    return (
+        text.charAt(0).toUpperCase() +
+        text.slice(1)
+    );
 }
+
 
 function formatText(text = "") {
-  return text
-
-    .split("-")
-
-    .map(capitalize)
-
-    .join(" ");
+    return text
+        .split("-")
+        .map(capitalize)
+        .join(" ");
 }
 
+
+/*
+ * Evita que contenido recibido desde una API
+ * pueda insertar etiquetas HTML en la página.
+ */
+function escapeHtml(value = "") {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
 function translateType(type) {
-  const translations = {
-    normal: "Normal",
+    const translations = {
+        normal: "Normal",
+        fire: "Fuego",
+        water: "Agua",
+        electric: "Eléctrico",
+        grass: "Planta",
+        ice: "Hielo",
+        fighting: "Lucha",
+        poison: "Veneno",
+        ground: "Tierra",
+        flying: "Volador",
+        psychic: "Psíquico",
+        bug: "Bicho",
+        rock: "Roca",
+        ghost: "Fantasma",
+        dragon: "Dragón",
+        dark: "Siniestro",
+        steel: "Acero",
+        fairy: "Hada"
+    };
 
-    fire: "Fuego",
-
-    water: "Agua",
-
-    electric: "Eléctrico",
-
-    grass: "Planta",
-
-    ice: "Hielo",
-
-    fighting: "Lucha",
-
-    poison: "Veneno",
-
-    ground: "Tierra",
-
-    flying: "Volador",
-
-    psychic: "Psíquico",
-
-    bug: "Bicho",
-
-    rock: "Roca",
-
-    ghost: "Fantasma",
-
-    dragon: "Dragón",
-
-    dark: "Siniestro",
-
-    steel: "Acero",
-
-    fairy: "Hada",
-  };
-
-  return translations[type] || capitalize(type);
+    return (
+        translations[type] ||
+        capitalize(type)
+    );
 }
