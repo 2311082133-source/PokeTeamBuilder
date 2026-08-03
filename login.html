@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | PokéTeam Builder</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/auth.css">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <img
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
+            class="logo">
+
+        <h1>PokéTeam Builder</h1>
+
+        <p>
+            Inicia sesión para continuar
+        </p>
+
+        <form id="loginForm">
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Correo electrónico"
+                required>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Contraseña"
+                required>
+
+            <button>
+
+                Iniciar sesión
+
+            </button>
+
+        </form>
+
+        <p class="bottom-text">
+
+            ¿No tienes cuenta?
+
+            <a href="registro.html">
+
+                Crear cuenta
+
+            </a>
+
+        </p>
+
+        <div id="message"></div>
+
+    </div>
+
+</div>
+
+<script
+type="module"
+src="js/login.js">
+</script>
+
+</body>
+
+</html>
