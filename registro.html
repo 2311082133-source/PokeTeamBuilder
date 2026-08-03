@@ -1,82 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Crear cuenta | PokéTeam Builder</title>
+        <title>Crear cuenta | PokéTeam Builder</title>
 
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/auth.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/auth.css">
 
-</head>
+    </head>
 
-<body>
+    <body>
 
-<div class="auth-container">
+        <div class="auth-container">
 
-    <div class="auth-card">
+            <div class="auth-card">
 
-        <img
-        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
-        class="logo">
+                <img
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
+                class="logo">
 
-        <h1>Crear cuenta</h1>
+                <h1>Crear cuenta</h1>
 
-        <form id="registerForm">
+                <form id="registerForm">
 
-            <input
-            id="name"
-            type="text"
-            placeholder="Nombre completo"
-            required>
+                    <input
+                    id="name"
+                    type="text"
+                    placeholder="Nombre completo"
+                    required>
 
-            <input
-            id="email"
-            type="email"
-            placeholder="Correo electrónico"
-            required>
+                    <input
+                    id="email"
+                    type="email"
+                    placeholder="Correo electrónico"
+                    required>
 
-            <input
-            id="password"
-            type="password"
-            placeholder="Contraseña"
-            required>
+                    <input
+                    id="password"
+                    type="password"
+                    placeholder="Contraseña"
+                    required>
 
-            <button>
+                    <button>
 
-                Registrarme
+                        Registrarme
 
-            </button>
+                    </button>
 
-        </form>
+                </form>
 
-        <p class="bottom-text">
+                <p class="bottom-text">
 
-            ¿Ya tienes cuenta?
+                    ¿Ya tienes cuenta?
 
-            <a href="login.html">
+                    <a href="login.html">
 
-                Iniciar sesión
+                        Iniciar sesión
 
-            </a>
+                    </a>
 
-        </p>
+                </p>
 
-        <div id="message"></div>
+                <div id="message"></div>
+
+            </div>
 
     </div>
 
-</div>
+        <script
+            type="module"
+            src="js/registro.js">
+        </script>
+        <script type="module" src="js/navbar-auth.js"></script>
 
-<script
-type="module"
-src="js/registro.js">
-</script>
-
-</body>
+    </body>
 
 </html>

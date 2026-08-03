@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
 
@@ -33,10 +34,45 @@
         </button>
 
         <nav id="mainNavigation">
-            <a href="index.html" class="active">Inicio</a>
-            <a href="pokedex.html">Pokédex</a>
-            <a href="favoritos.html">Favoritos ⭐</a>
-            <a href="equipos.html">Mis equipos</a>
+
+            <a href="index.html" class="active">
+                Inicio
+            </a>
+
+            <a href="pokedex.html">
+                Pokédex
+            </a>
+
+            <a href="favoritos.html">
+                Favoritos ⭐
+            </a>
+
+            <a href="equipos.html">
+                Mis equipos
+            </a>
+
+            <a
+                href="login.html"
+                id="loginLink"
+            >
+                Iniciar sesión
+            </a>
+
+            <a
+                href="registro.html"
+                id="registerLink"
+            >
+                Registrarse
+            </a>
+
+            <a
+                href="#"
+                id="logoutLink"
+                style="display:none;"
+            >
+                Cerrar sesión
+            </a>
+
         </nav>
     </header>
 
@@ -44,6 +80,7 @@
 
         <section class="home-hero">
             <div class="hero-content">
+
                 <span class="hero-label">
                     Construye tu equipo ideal
                 </span>
@@ -60,6 +97,7 @@
                 </p>
 
                 <div class="hero-buttons">
+
                     <a
                         href="pokedex.html"
                         class="hero-btn hero-btn-primary"
@@ -74,80 +112,135 @@
                     >
                         Ver mis equipos
                     </a>
+
                 </div>
+
             </div>
 
             <div class="hero-visual">
+
                 <div
                     class="hero-pokeball"
                     aria-label="Pokébola decorativa"
                 ></div>
+
             </div>
+
         </section>
 
         <section class="features-section">
+
             <div class="section-heading">
-                <span>Funciones principales</span>
-                <h2>Todo lo necesario para formar tu equipo</h2>
+
+                <span>
+                    Funciones principales
+                </span>
+
+                <h2>
+                    Todo lo necesario para formar tu equipo
+                </h2>
+
             </div>
 
             <div class="features-grid">
 
                 <article class="home-feature-card">
-                    <div class="home-feature-icon">🔍</div>
-                    <h3>Explora Pokémon</h3>
+
+                    <div class="home-feature-icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Explora Pokémon
+                    </h3>
+
                     <p>
                         Busca por nombre o número, filtra por tipo
                         y consulta sus características.
                     </p>
+
                     <a
                         href="pokedex.html"
                         class="home-feature-link"
                     >
                         Abrir Pokédex →
                     </a>
+
                 </article>
 
                 <article class="home-feature-card">
-                    <div class="home-feature-icon">⭐</div>
-                    <h3>Guarda favoritos</h3>
+
+                    <div class="home-feature-icon">
+                        ⭐
+                    </div>
+
+                    <h3>
+                        Guarda favoritos
+                    </h3>
+
                     <p>
                         Conserva tus Pokémon favoritos y recibe
                         actualizaciones mediante Firebase.
                     </p>
+
                     <a
                         href="favoritos.html"
                         class="home-feature-link"
                     >
                         Ver favoritos →
                     </a>
+
                 </article>
 
                 <article class="home-feature-card">
-                    <div class="home-feature-icon">👥</div>
-                    <h3>Crea equipos</h3>
+
+                    <div class="home-feature-icon">
+                        👥
+                    </div>
+
+                    <h3>
+                        Crea equipos
+                    </h3>
+
                     <p>
                         Construye equipos personalizados de hasta
                         seis Pokémon.
                     </p>
+
                     <a
                         href="equipos.html"
                         class="home-feature-link"
                     >
                         Crear equipo →
                     </a>
+
                 </article>
 
             </div>
+
         </section>
 
     </main>
 
     <footer class="main-footer">
-        <p class="footer-brand">PokéTeam Builder</p>
-        <p>Proyecto universitario · PokéAPI + Firebase</p>
+
+        <p class="footer-brand">
+            PokéTeam Builder
+        </p>
+
+        <p>
+            Proyecto universitario · PokéAPI + Firebase
+        </p>
+
     </footer>
 
     <script src="js/app.js"></script>
+
+    <script
+        type="module"
+        src="js/navbar-auth.js">
+    </script>
+
 </body>
+
 </html>
