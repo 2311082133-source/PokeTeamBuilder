@@ -22,7 +22,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AQUI_TU_API_KEY_REAL",
+    apiKey: "AIzaSyCj-4ct5hx9wtXVqwKGAXiYUTPjq6tnMUk",
     authDomain: "poketeambuilder-1110f.firebaseapp.com",
     databaseURL: "https://poketeambuilder-1110f-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "poketeambuilder-1110f",
