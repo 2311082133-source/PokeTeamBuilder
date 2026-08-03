@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | PokéTeam Builder</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+            <span class="logo-ball"></span>
+            PokéTeam Builder
+        </a>
+
+        <button
+            type="button"
+            id="menuButton"
+            class="menu-button"
+            aria-label="Abrir menú">
+            ☰
+        </button>
+
+        <nav id="mainNavigation">
+
+            <a href="index.html">Inicio</a>
+
+            <a href="pokedex.html">Pokédex</a>
+
+            <a href="favoritos.html">Favoritos ⭐</a>
+
+            <a href="equipos.html">Mis equipos</a>
+
+            <a href="admin.html" class="active" id="adminLink">
+                Administración
+            </a>
+
+            <a href="login.html" id="loginLink">
+                Iniciar sesión
+            </a>
+
+            <a href="registro.html" id="registerLink">
+                Registrarse
+            </a>
+
+            <a href="#" id="logoutLink" style="display:none;">
+                Cerrar sesión
+            </a>
+
+        </nav>
+
+    </header>
+
+    <main class="admin-main">
+
+        <section class="admin-header">
+
+            <h1>
+                Panel de Administración
+            </h1>
+
+            <p>
+                Administra usuarios, revisa estadísticas y controla el sistema.
+            </p>
+
+        </section>
+
+        <section class="dashboard-grid">
+
+            <article class="dashboard-card">
+                <span>👥</span>
+                <h3>Usuarios</h3>
+                <p id="usuariosTotal">0</p>
+            </article>
+
+            <article class="dashboard-card">
+                <span>⭐</span>
+                <h3>Favoritos</h3>
+                <p id="favoritosTotal">0</p>
+            </article>
+
+            <article class="dashboard-card">
+                <span>🛡️</span>
+                <h3>Equipos</h3>
+                <p id="equiposTotal">0</p>
+            </article>
+
+            <article class="dashboard-card">
+                <span>🔥</span>
+                <h3>Estado</h3>
+                <p>Administrador</p>
+            </article>
+
+        </section>
+
+        <section class="users-section">
+
+            <div class="users-header">
+
+                <h2>
+                    Administración de Usuarios
+                </h2>
+
+                <input
+                    type="text"
+                    id="searchUser"
+                    placeholder="Buscar por nombre o correo...">
+
+            </div>
+
+            <div class="table-container">
+
+                <table class="users-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nombre</th>
+
+                            <th>Correo</th>
+
+                            <th>Rol</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="usersTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+
+    <script
+        type="module"
+        src="js/navbar-auth.js">
+    </script>
+
+    <script
+        type="module"
+        src="js/admin.js">
+    </script>
+
+</body>
+
+</html>

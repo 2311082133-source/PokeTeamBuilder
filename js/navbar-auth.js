@@ -1,37 +1,86 @@
 import {
     auth,
+    database,
+    ref,
+    get,
     signOut,
     onAuthStateChanged
 } from "./firebase.js";
 
-const loginLink = document.getElementById("loginLink");
-const registerLink = document.getElementById("registerLink");
-const logoutLink = document.getElementById("logoutLink");
+const login=document.getElementById("loginLink");
+const registro=document.getElementById("registerLink");
+const logout=document.getElementById("logoutLink");
 
-onAuthStateChanged(auth, (user) => {
+const nav=document.getElementById("mainNavigation");
 
-    if (user) {
+onAuthStateChanged(auth,async(user)=>{
 
-        loginLink.style.display = "none";
-        registerLink.style.display = "none";
-        logoutLink.style.display = "inline-block";
+if(!user){
 
-    } else {
+if(login)login.style.display="";
 
-        loginLink.style.display = "inline-block";
-        registerLink.style.display = "inline-block";
-        logoutLink.style.display = "none";
+if(registro)registro.style.display="";
 
-    }
+if(logout)logout.style.display="none";
+
+return;
+
+}
+
+if(login)login.style.display="none";
+
+if(registro)registro.style.display="none";
+
+if(logout)logout.style.display="";
+
+const snapshot=
+
+await get(
+
+ref(database,"usuarios/"+user.uid)
+
+);
+
+if(snapshot.exists()){
+
+const datos=snapshot.val();
+
+if(datos.rol=="admin"){
+
+const existe=
+
+document.getElementById("adminLink");
+
+if(!existe){
+
+const a=document.createElement("a");
+
+a.href="admin.html";
+
+a.id="adminLink";
+
+a.textContent="Administración";
+
+nav.insertBefore(a,logout);
+
+}
+
+}
+
+}
 
 });
 
-logoutLink.addEventListener("click", async (e) => {
+if(logout){
 
-    e.preventDefault();
+logout.addEventListener("click",async(e)=>{
 
-    await signOut(auth);
+e.preventDefault();
 
-    location.href = "login.html";
+await signOut(auth);
+
+location.href="login.html";
 
 });
+
+}
