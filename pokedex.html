@@ -21,11 +21,27 @@
                 PokéTeam Builder
             </a>
 
-            <nav>
+            <nav id="mainNavigation">
                 <a href="index.html">Inicio</a>
                 <a href="pokedex.html" class="active">Pokédex</a>
                 <a href="favoritos.html">Favoritos ⭐</a>
                 <a href="equipos.html">Mis equipos</a>
+
+                <a href="login.html" id="loginLink">
+                    Iniciar sesión
+                </a>
+
+                <a href="registro.html" id="registerLink">
+                    Registrarse
+                </a>
+
+                <a
+                    href="#"
+                    id="logoutLink"
+                    style="display:none;"
+                >
+                    Cerrar sesión
+                </a>
             </nav>
         </header>
 
@@ -147,6 +163,12 @@
                 PokéTeam Builder — Proyecto universitario
             </p>
         </footer>
+        <script src="js/app.js"></script>
+
+        <script
+            type="module"
+            src="js/navbar-auth.js"
+        ></script>
 
         <script
             type="module"

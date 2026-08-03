@@ -7,80 +7,69 @@ import {
     onAuthStateChanged
 } from "./firebase.js";
 
-const login=document.getElementById("loginLink");
-const registro=document.getElementById("registerLink");
-const logout=document.getElementById("logoutLink");
+const loginLink = document.getElementById("loginLink");
+const registerLink = document.getElementById("registerLink");
+const logoutLink = document.getElementById("logoutLink");
+const navigation = document.getElementById("mainNavigation");
 
-const nav=document.getElementById("mainNavigation");
+onAuthStateChanged(auth, async (user) => {
 
-onAuthStateChanged(auth,async(user)=>{
+    // Elimina un enlace anterior si existe
+    const oldAdmin = document.getElementById("adminLink");
+    if (oldAdmin) {
+        oldAdmin.remove();
+    }
 
-if(!user){
+    if (!user) {
 
-if(login)login.style.display="";
+        if (loginLink) loginLink.style.display = "";
+        if (registerLink) registerLink.style.display = "";
+        if (logoutLink) logoutLink.style.display = "none";
 
-if(registro)registro.style.display="";
+        return;
+    }
 
-if(logout)logout.style.display="none";
+    if (loginLink) loginLink.style.display = "none";
+    if (registerLink) registerLink.style.display = "none";
+    if (logoutLink) logoutLink.style.display = "";
 
-return;
+    const snapshot = await get(
+        ref(database, "usuarios/" + user.uid)
+    );
 
-}
+    if (!snapshot.exists()) {
+        return;
+    }
 
-if(login)login.style.display="none";
+    const datos = snapshot.val();
 
-if(registro)registro.style.display="none";
+    // Mostrar Panel de Administración solo al admin
+    if (datos.rol === "admin" && navigation) {
 
-if(logout)logout.style.display="";
+        const adminLink = document.createElement("a");
 
-const snapshot=
+        adminLink.href = "admin.html";
+        adminLink.id = "adminLink";
+        adminLink.textContent = "Administración";
 
-await get(
-
-ref(database,"usuarios/"+user.uid)
-
-);
-
-if(snapshot.exists()){
-
-const datos=snapshot.val();
-
-if(datos.rol=="admin"){
-
-const existe=
-
-document.getElementById("adminLink");
-
-if(!existe){
-
-const a=document.createElement("a");
-
-a.href="admin.html";
-
-a.id="adminLink";
-
-a.textContent="Administración";
-
-nav.insertBefore(a,logout);
-
-}
-
-}
-
-}
+        navigation.insertBefore(
+            adminLink,
+            logoutLink
+        );
+    }
 
 });
 
-if(logout){
+if (logoutLink) {
 
-logout.addEventListener("click",async(e)=>{
+    logoutLink.addEventListener("click", async (e) => {
 
-e.preventDefault();
+        e.preventDefault();
 
-await signOut(auth);
+        await signOut(auth);
 
-location.href="login.html";
+        window.location.href = "login.html";
 
-});
+    });
 
 }
